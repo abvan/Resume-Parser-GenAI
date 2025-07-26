@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Resume Upload - Saint-Gobain</title>
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/main.css">
+</head>
+<body>
+  <header>
+    <img class="logo" src="static/images/colored_sglogo.png" alt="Saint-Gobain Logo">
+    <nav>
+      <ul class="nav_links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#about">About us</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#results">Results</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="upload-container">
+    <div class="upload-box">
+      <h2>UPLOAD RESUMES</h2>
+
+      <form action="" method="POST" enctype="multipart/form-data">
+        
+        <div class="role-selection">
+          <label for="role-select" class="role-label">Enter Job-Id</label>          
+          <input id="job_id" name="job_id" class="role-dropdown" />
+        </div>
+
+        <label class="file-upload">
+                    
+          <div class="file-upload-content">
+            <i class='bx bx-cloud-upload upload-icon'></i>
+            <span class="upload-text">Select Files</span>
+            <span class="upload-subtext">Click to browse and upload</span>
+          </div>
+
+          <input type="file" name="resumes" multiple accept=".pdf,.doc,.docx" id="file-input" />
+        </label>
+
+        <div class="file-counter" id="file-counter">0 files selected</div>
+        
+        <button type="submit" class="upload-btn">
+          <i class='bx bx-upload'></i> Submit
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>  
+  
+</body>
+</html>

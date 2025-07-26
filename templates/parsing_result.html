@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+</head>
+<body>
+    {% if results %}
+    <div class="card p-4 shadow-sm">
+        <h4 class="mb-3">Results</h4>
+        <div class="table-responsive">
+            <table class="table table-bordered align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Job Description</th>
+                        <th>Resume</th>
+                        <th>Match %</th>
+                        <th>Status</th>
+                        <th>Top Skills</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in results %}
+                    <tr>
+                        <td>{{ row.jd }}</td>
+                        <td>{{ row.resume }}</td>
+                        <td><strong>{{ row.match_percent }}%</strong></td>
+                        <td>
+                            {% if row.status == 'Shortlist' %}
+                                <span class="badge bg-success">{{ row.status }}</span>
+                            {% elif row.status == 'Hold' %}
+                                <span class="badge bg-warning text-dark">{{ row.status }}</span>
+                            {% else %}
+                                <span class="badge bg-danger">{{ row.status }}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ row.top_skills }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if csv_file %}
+        <div class="text-end mt-3">
+            <a href="{{ url_for('download_csv', filename=csv_file) }}" class="btn btn-outline-secondary">
+                ⬇️ Download CSV
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+</body>
+</html>
