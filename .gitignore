@@ -1,2 +1,4 @@
 .venv/
 uploads/resumes/
+.env
+__pycache__/
