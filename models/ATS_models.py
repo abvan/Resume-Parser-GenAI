@@ -23,3 +23,5 @@ class ResumeParsingHistory(db.Model):
     def __init__(self,job_id,last_parse):
         self.job_id = job_id
         self.last_parse = last_parse
+
+## Create a Table which will store all the parsing results
