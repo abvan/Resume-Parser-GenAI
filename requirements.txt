@@ -4,3 +4,8 @@ Flask-Migrate
 #flask_validator 
 psycopg2-binary
 python-dotenv  
+pymupdf
+python-docx
+textract
+langchain
+langchain_groq
