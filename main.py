@@ -7,6 +7,7 @@ from models.ATS_models import *
 from dotenv import load_dotenv
 from utils.file_utils import *
 from utils.database_utils import *
+from utils.parsing_utils import *
 #from werkzeug.exceptions import RequestEntityTooLarge
 
 load_dotenv()
@@ -57,7 +58,17 @@ def index():
 def parse_job_resumes(job_id):
 
     fileListToParse = get_latest_upload(job_id)
-    #3 Call parsing_utilities
+    
+    #Get the JD Text- THINK SOMETHING ON JD PART
+    filepath= 'C:\\Users\\Abhishek\\Downloads\\Azure_Data_Engineer_JD.pdf'
+    jd_Text = extract_text(filepath)
+    
+    folder_name = f"JobID-{job_id}"
+    for fileName in fileListToParse :
+        filepath = os.path.join(current_app.config['UPLOAD_PATH'],folder_name,fileName)
+        resume_Text = extract_text(filepath)
+        json_result = resume_parser(jd_Text,resume_Text)
+        print(json_result)
     #4 Append the Result for all the resumes
     #5 Save it in a Database
     #6 Display it in the FrontEnd (JobRelated)

@@ -28,7 +28,7 @@ def extract_text(file_path):
     else:
         raise ValueError("Unsupported file type: " + ext)
 
-def parser(jd_text,resume_text):
+def resume_parser(jd_text,resume_text):
     
     # Initialize the Groq LLM
     llm = ChatGroq(

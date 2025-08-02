@@ -26,26 +26,24 @@ def create_folder_path(job_id):
 
 #Get the List of Resumes that were uploaded in last 1 Min
 def get_latest_upload(job_id):
-    
-    # 1-minute window
-    time_threshold = datetime.now() - timedelta(hours=1)
     latest_files = []
-    
     folder_path = os.path.join(current_app.config['UPLOAD_PATH'],f"JobID-{job_id}")
-    
     if not os.path.exists(folder_path):
         latest_files.append('Folder Does Not Exists')
         return latest_files
     
-    
+    time_threshold = datetime.now() - timedelta(hours=2) # 1-minute window
     for filename in os.listdir(folder_path):
         file_path = os.path.join(folder_path, filename)
-
         if os.path.isfile(file_path):
             modified_time = datetime.fromtimestamp(os.path.getmtime(file_path))
-
             # Check if modified time is within the last 1 minute
             if modified_time >= time_threshold:
                 latest_files.append(filename)
 
     return latest_files
+
+#Get the JobDescription based on the JobID
+def get_jd_filepath(job_id):
+    print(job_id)
+    pass
