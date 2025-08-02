@@ -17,3 +17,22 @@ def insertsomething():
 
 ##Write a Function that will save the parsing result in a table in the database
 ##Input Pandas DataFrame or Json
+
+def InsertParsingResults(result):
+    # Create a new record
+    parsing_result = ResumeMatchResult(
+        candidate_name=result['candidate_name'],
+        job_id=result['job_id'],
+        match_percent=result['match_percent'],
+        top_skills = ', '.join(result['top_skills']),
+        verdict=result['Verdict'],
+        reviewed_by= f"Model__{result['model_name']}",
+        additional_comment=result['comments'],
+        review_datetime=datetime.now(),  # Optional, as server_default will handle this if omitted
+        resume_file_path=result['resume_file_path']
+    )
+    with current_app.app_context():
+        db.create_all()
+        db.session.add(parsing_result)
+        db.session.commit()  
+    print("record inserted")

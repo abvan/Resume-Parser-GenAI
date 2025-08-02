@@ -39,22 +39,22 @@ def resume_parser(jd_text,resume_text):
     
     # Create the prompt template
     prompt_template = ChatPromptTemplate.from_messages([
-        ("system", """You are an expert HR analyst. Always return a JSON response with exact keys: match_percent, status, top_skills, comments. 
+        ("system", """You are an expert HR analyst. Always return a JSON response with exact keys: match_percent, Verdict, top_skills, comments. 
         Be consistent and deterministic in your analysis.
         
-        Rules for status decision:
+        Rules for Verdict decision:
         - Reject: <40% match
         - Hold: 40-65% match  
         - Shortlist: >65% match"""),
         ("user", """Job Description Text: {jd_text} Resume Text:{resume_text}
 
         Compare the Job description and the Resume :
-        - Return a match percentage based on overlap
-        - Decide if the resume should be 'Shortlist', 'Hold', or 'Reject'
-        - List the top 5 most relevant skills (no suggestions or explanations)
-        - Comment on the Resume within 75 words, on areas that are good or the areas that needs to be improved for the role 
+        - Return a match percentage based on overlap.
+        - Decide if the resume should be 'Shortlist', 'Hold', or 'Reject'.
+        - List the top 5 most relevant skills (no suggestions or explanations).
+        - Comment on the Resume within 75 words, on areas that are good or the areas that needs to be improved for the role.
 
-        Return a JSON with keys: match_percent, status, top_skills.""")
+        Return a JSON with keys: match_percent, Verdict, top_skills.""")
     ])
 
     # Create the output parser
@@ -70,6 +70,7 @@ def resume_parser(jd_text,resume_text):
             "jd_text": jd_text,
             "resume_text": resume_text
         })
+        result['model_name'] = llm.model_name
         return result    
     except Exception as e:
         print("LangChain Processing Error:", e)
@@ -82,8 +83,9 @@ def resume_parser(jd_text,resume_text):
     
 # filepath= 'C:\\Users\\Abhishek\\Downloads\\Azure_Data_Engineer_JD.pdf'
 # jd_text = extract_text(filepath)
-# filepath = 'C:\\Users\Abhishek\\PROJECTS\\Resume_Parser_GenAI\\uploads\\resumes\\JobID-564\\AbhishekChavan_Resume_2025_20250727.pdf'
+# filepath = 'C:\\Users\Abhishek\\PROJECTS\\Resume_Parser_GenAI\\uploads\\resumes\\JobID-123456\\AbhishekChavan_DataEngineer_20250802_090659.pdf'
 # resume_text = extract_text(filepath)
-# result = parser(jd_text,resume_text)
+# result = resume_parser(jd_text,resume_text)
 
-# print(result)
+#result = {'match_percent': 82, 'Verdict': 'Shortlist', 'top_skills': ['Azure Data Factory', 'Azure Databricks', 'Azure DevOps', 'Python', 'SQL'], 'comments': 'The candidate has a strong background in Azure data engineering, with relevant experience in designing and building scalable data pipelines. The certifications in Microsoft Azure and Databricks are a plus. However, the resume could be improved by highlighting more specific examples of data governance, security, and privacy regulations experience.'}
+#print(type(result))
