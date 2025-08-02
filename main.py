@@ -32,29 +32,6 @@ db.init_app(app)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    insertsomething()
-
-    if request.method == 'POST':
-        job_id = request.form['job_id']
-        folder_path = create_folder_path(job_id)
-        
-        #Receive multiple files from the post request and saves it to the disk.
-        for uploaded_file in request.files.getlist('resumes'):
-            filename = secure_filename(uploaded_file.filename)
-            if uploaded_file.filename != '':
-                file_ext = filename.rsplit('.', 1)[1].lower()
-                
-                #Accepting only secureed File Extensions
-                if file_ext not in app.config['ALLOWED_EXTENSIONS']:
-                    return render_template_string("""<body>Not allowed<body>""") # TEMPORARY : CHANGE THIS
-              
-                unique_filename = generate_unique_filename(uploaded_file.filename)
-                uploaded_file.save(os.path.join(folder_path, unique_filename))
-        return redirect(url_for('index'))
-    return render_template('index.html')
-
-@app.route('/parser', methods=['GET', 'POST'])
-def parser():
     #insertsomething()
 
     if request.method == 'POST':
@@ -73,8 +50,28 @@ def parser():
               
                 unique_filename = generate_unique_filename(uploaded_file.filename)
                 uploaded_file.save(os.path.join(folder_path, unique_filename))
-        return redirect(url_for('index'))
+        return redirect(url_for('parse_job_resumes',job_id=job_id))
     return render_template('index.html')
+
+@app.route('/parse_resumes/<job_id>', methods=['GET', 'POST'])
+def parse_job_resumes(job_id):
+
+    fileListToParse = get_latest_upload(job_id)
+    #3 Call parsing_utilities
+    #4 Append the Result for all the resumes
+    #5 Save it in a Database
+    #6 Display it in the FrontEnd (JobRelated)
+
+
+    return render_template_string("""
+        <H1>Hello PARSED RESUME</H1><body>
+        <h2>Items in the List:</h2>
+        <ul>
+            {% for item in items %}
+                <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+                                  """,items=fileListToParse)
 
 if __name__ == '__main__':  
     app.run(debug=True) 

@@ -4,7 +4,6 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
 import os
 import json
-import os
 import fitz  # PyMuPDF
 import docx
 from dotenv import load_dotenv
@@ -35,13 +34,12 @@ def parser(jd_text,resume_text):
     llm = ChatGroq(
         groq_api_key=groq_api_key,
         model_name="llama3-70b-8192",
-        temperature=0.0,
-        top_p=1.0
+        temperature=0.0
     )
     
     # Create the prompt template
     prompt_template = ChatPromptTemplate.from_messages([
-        ("system", """You are an expert HR analyst. Always return a JSON response with exact keys: match_percent, status, top_skills. 
+        ("system", """You are an expert HR analyst. Always return a JSON response with exact keys: match_percent, status, top_skills, comments. 
         Be consistent and deterministic in your analysis.
         
         Rules for status decision:
@@ -54,6 +52,7 @@ def parser(jd_text,resume_text):
         - Return a match percentage based on overlap
         - Decide if the resume should be 'Shortlist', 'Hold', or 'Reject'
         - List the top 5 most relevant skills (no suggestions or explanations)
+        - Comment on the Resume within 75 words, on areas that are good or the areas that needs to be improved for the role 
 
         Return a JSON with keys: match_percent, status, top_skills.""")
     ])
