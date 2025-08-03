@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, Integer, String, Numeric, Text, CheckConstraint,Enum, DateTime, func
+from sqlalchemy import Column, Integer, String, Numeric, Text, CheckConstraint,Enum, DateTime, func, Row,desc
 
 db = SQLAlchemy()
 
@@ -36,6 +36,7 @@ class ResumeMatchResult(db.Model):
 
     result_id = db.Column(Integer, primary_key=True, autoincrement=True)
     candidate_name = db.Column(String(100), nullable=False)
+    experience_in_years = db.Column(Numeric(2,1))
     job_id = db.Column(Integer, nullable=False)
     match_percent = db.Column(Numeric(5, 2))
     top_skills = db.Column(Text)
@@ -46,10 +47,12 @@ class ResumeMatchResult(db.Model):
     resume_file_path = db.Column(Text)
    
     
-    def __init__(self,candidate_name,job_id,match_percent,verdict,additional_comment,reviewed_by,review_datetime,resume_file_path):
+    def __init__(self,candidate_name,experience_in_years,job_id,top_skills,match_percent,verdict,additional_comment,reviewed_by,review_datetime,resume_file_path):
         self.candidate_name = candidate_name
+        self.experience_in_years = experience_in_years
         self.job_id = job_id
         self.match_percent = match_percent
+        self.top_skills = top_skills
         self.verdict = verdict
         self.reviewed_by = reviewed_by
         self.additional_comment = additional_comment

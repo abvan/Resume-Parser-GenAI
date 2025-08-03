@@ -52,7 +52,7 @@ def resume_parser(jd_text,resume_text):
         - Return a match percentage based on overlap.
         - Decide if the resume should be 'Shortlist', 'Hold', or 'Reject'.
         - List the top 5 most relevant skills (no suggestions or explanations).
-        - Comment on the Resume within 75 words, on areas that are good or the areas that needs to be improved for the role.
+        - Comment on the Resume within 50 words, on areas that are good or the areas that needs to be improved for the role.
 
         Return a JSON with keys: match_percent, Verdict, top_skills.""")
     ])

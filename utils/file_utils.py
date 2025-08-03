@@ -32,7 +32,7 @@ def get_latest_upload(job_id):
         latest_files.append('Folder Does Not Exists')
         return latest_files
     
-    time_threshold = datetime.now() - timedelta(hours=2) # 1-minute window
+    time_threshold = datetime.now() - timedelta(minutes=1) # 1-minute window
     for filename in os.listdir(folder_path):
         file_path = os.path.join(folder_path, filename)
         if os.path.isfile(file_path):

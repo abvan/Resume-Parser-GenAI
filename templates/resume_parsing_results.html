@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Candidate Analysis Results - Saint-Gobain</title>
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/resume_parsing.css">
+</head>
+<body>
+  <!-- <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-content">
+      <div class="spinner"></div>
+      <div class="loading-text">Analyzing Candidates</div>
+      <div class="loading-subtext">Processing resumes and matching skills...</div>
+      <div class="loading-bar-container">
+        <div class="loading-bar"></div>
+      </div>
+    </div>
+  </div> -->
+
+  <div class="results-container" id="resultsContainer">
+    <div class="page-header">
+      <div class="header-content">
+        <img class="logo" src="{{url_for('static', filename='images/colored_sglogo.png')}}" alt="Saint-Gobain Logo">
+        <div class="title-section">
+          <h1 class="page-title">Resume Analysis Results</h1>
+          <p class="job-id-subtitle" id="jobIdSubtitle">For Job ID: {% print(candidates[0].job_id) %}</p>
+        </div>
+        <a href="Parsed.html" class="overall-page-btn">
+          <i class='bx bx-bar-chart-alt-2'></i>
+          Overall View
+        </a>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table id="candidateTable">
+        <thead>
+          <tr>
+            <th>Candidate Name</th>
+            <th>Exp (Yrs)</th>
+            <th>Match Score</th>
+            <th>Top Skills</th>
+            <th>Verdict</th>
+            <th>Comment/Reason</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          {% for candidate in candidates %}
+          <tr>
+            <td><span class="candidate-name">{{ candidate.candidate_name }}</span></td>
+            <td>{{ candidate.experience_in_years }}</td>
+            <td>{{ candidate.match_percent }}%</td>
+            <td>{{ candidate.top_skills }}</td>
+            <td>
+              {% if candidate.verdict == 'Shortlist' %}
+                <span class="status-badge status-shortlist">{{ candidate.verdict }}</span>
+              {% elif candidate.verdict == 'Reject' %}
+                <span class="status-badge status-reject">{{ candidate.verdict }}</span>
+              {% else %}
+                <span class="status-badge status-hold">{{ candidate.verdict }}</span>
+              {% endif %}
+            </td>
+            <td>{{ candidate.additional_comment }}</td>
+          </tr>
+          {% else %}
+      <tr>
+        <td colspan="7" class="no-data">No candidates found</td>
+      </tr>
+      {% endfor %}
+          </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/resume_parsing.js') }}"></script>  
+
+</body>
+</html>

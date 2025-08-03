@@ -53,42 +53,34 @@ def index():
     return render_template('index.html')
 
 @app.route('/parse_resumes/<job_id>', methods=['GET', 'POST'])
-def parse_job_resumes(job_id):
-                    
+def parse_job_resumes(job_id):                
     fileListToParse = get_latest_upload(job_id)
+    
     #Get the JD Text- THINK SOMETHING ON JD PART
     filepath= 'C:\\Users\\Abhishek\\Downloads\\Azure_Data_Engineer_JD.pdf'
     jd_Text = extract_text(filepath)
     
     folder_name = f"JobID-{job_id}"
+    
     for fileName in fileListToParse :
         print(fileName)
         filepath = os.path.join(current_app.config['UPLOAD_PATH'],folder_name,fileName).replace("\\", "/")
         resume_Text = extract_text(filepath)
         json_result = resume_parser(jd_Text,resume_Text) #Calling and Comparing Using LLM
-#       json_result = {'match_percent': 83, 'Verdict': 'Shortlist', 'top_skills': ['Azure Data Factory', 'Azure Databricks', 'Azure DevOps', 'Python', 'Azure Synapse Analytics'], 'comments': 'The candidate has a strong background in Azure data engineering, with relevant experience in designing and building scalable data pipelines. The certifications in Azure Data Engineer and Fabric Data Engineer are a plus. However, the resume could benefit from more details on data governance and security aspects.'}  
         filenameparts = fileName.split('_')
         json_result['candidate_name'] = filenameparts[0] #+" "+filenameparts[1]
+        json_result['experience_in_years'] = '0'#filenameparts[3]
         json_result['job_id'] = job_id
         json_result['resume_file_path'] = filepath
-
-    #4 Append the Result for all the resumes
-    #5 Save it in a Database
-    InsertParsingResults(json_result)
-    #json_result = {'match_percent': 82, 'Verdict': 'Shortlist', 'top_skills': ['Azure Data Factory', 'Azure Databricks', 'Azure DevOps', 'Python', 'SQL'], 'comments': 'The candidate has a strong background in Azure data engineering, with relevant experience in designing and building scalable data pipelines. The certifications in Microsoft Azure and Databricks are a plus. However, the resume could be improved by highlighting more specific examples of data governance, security, and privacy regulations experience.'}
+        #Save result in the Database
+        InsertParsingResults(json_result)
     
     #6 Display it in the FrontEnd (JobRelated)
+    return redirect(url_for('displayresult',job_id=job_id))
 
-
-    return render_template_string("""
-        <H1>Hello PARSED RESUME</H1><body>
-        <h2>Items in the List:</h2>
-        <ul>
-            {% for item in items %}
-                <li>{{ item }}</li>
-            {% endfor %}
-        </ul>
-                                  """)
-
+@app.route('/displayresult/<job_id>', methods=['GET', 'POST'])
+def displayresult(job_id):
+    candidates = RetrieveParsingResults(job_id)
+    return render_template('resume_parsing_results.html',candidates=candidates)
 if __name__ == '__main__':  
     app.run(debug=True) 
